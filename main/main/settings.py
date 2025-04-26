@@ -11,11 +11,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-^10aeas6j^pvjsz4cs_)69jesnw)0cbf^srn^j5hw_eoeqn@%f'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['blood-donation-backend.onrender.com']
+ALLOWED_HOSTS = [
+    'backend-bwoh.onrender.com',
+    '*.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -106,7 +114,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # }
 
 import os
-import dj_database_url  # Optional, for easier database config
+import dj_database_url  # type: ignore # Optional, for easier database config
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -151,17 +159,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'users.CustomUser'  
+AUTH_USER_MODEL = 'users.CustomUser'
 
-media_root = BASE_DIR / 'media'
-media_url = '/media/'
-
+# Media files (Images, etc.)
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackends"
 EMAIL_HOST = "smtp.gmail.com"
